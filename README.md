@@ -13,7 +13,7 @@
 
 ## Instruction
 1. Get your [oauth](https://twitchapps.com/tmi/)
-2. In the plugins/streamInfoTwitch/config.yml, write - oauth: oauth:... \n nick: nick
+2. In the plugins/streamInfoTwitch/config.yml, write - oauth: oauth:... nick: nick
 
 ## API
 ```
@@ -36,7 +36,7 @@
 
 ## Инструкции
 1. Получите свой [oauth](https://twitchapps.com/tmi/)
-4. И напишите в plugins/streamInfoTwitch/config.yml - oauth: oauth:... \n nick: nick
+4. И напишите в plugins/streamInfoTwitch/config.yml - oauth: oauth:... nick: nick
 
 ## API
 ```
