@@ -1,5 +1,5 @@
 # twitchStream
-Плагин-библиотека позволяет связать майнкрафт и стрим на твиче, имеет API / The plugin-lib allows you to link Minecraft and Twitch stream, has an API
+Плагин-библиотека позволяет связать майнкрафт и стрим на твиче / The plugin-lib allows you to link Minecraft and Twitch stream
 
 # ENG
 ## Compile
@@ -8,17 +8,26 @@
 3. Now you have the code that you can edit!
 
 ## Install for Server
-1. Download the compiled [StreamInfoTwitch](https://github.com/Dseym/streamInfoTwitch/releases/download/streamInfoTwitch/streamInfoTwitch.jar) and upload it to your server.
+1. Download the compiled [TwitchStream](https://github.com/Dseym/twitchStream/releases/download/twitchStream/twitchStream.jar) and upload it to your server.
 2. Have fun!
 
-## API
+## Using
 Get your [oauth](https://twitchapps.com/tmi/)
-```
- Instantiate the class - new Twitch(channel)
- channel - channel name #(name) (#dsey)
- Class Methods:
- connect() - join the chat
- disconnect() - disconnect from chat
+```java
+IMessagesListener listener = new IMessagesListener() {
+			
+	@Override
+	public void onMessage(String nick, String message) {
+		
+		System.out.println(nick + ": " + message);
+		
+	}
+	
+};
+
+Twitch twitch = new Twitch(channel, oauth, yourNick, listener);
+
+twitch.connect();
 ```
 
 # RUS
@@ -28,17 +37,26 @@ Get your [oauth](https://twitchapps.com/tmi/)
 3. Теперь у Вас есть код для редактирования!
 
 ## Установка на сервер
-1. Скачайте скомпилированный [StreamInfoTwitch](https://github.com/Dseym/streamInfoTwitch/releases/download/streamInfoTwitch/streamInfoTwitch.jar) и загрузите на свой сервер.
+1. Скачайте скомпилированный [TwitchStream](https://github.com/Dseym/twitchStream/releases/download/twitchStream/twitchStream.jar) и загрузите на свой сервер.
 2. Веселитесь!
 
 ## API
 Получите свой [oauth](https://twitchapps.com/tmi/)
-```
- Создайте экземпляр класса - new Twitch(channel)
- channel - название канала #(name) (#dsey)
- Методы класса:
- connect() - присоединиться к чату
- disconnect() - отсоединиться от чата
+```java
+IMessagesListener listener = new IMessagesListener() {
+			
+	@Override
+	public void onMessage(String nick, String message) {
+		
+		System.out.println(nick + ": " + message);
+		
+	}
+	
+};
+
+Twitch twitch = new Twitch(channel, oauth, yourNick, listener);
+
+twitch.connect();
 ```
 
 Для свободного использование.
