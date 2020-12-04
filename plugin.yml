@@ -1,3 +1,3 @@
-name: StreamInfoTwitch
+name: TwitchStream
 version: 1.0
-main: streamInfoTwitch.Main
+main: ru.dseymo.twitchStream.Main
