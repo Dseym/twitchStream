@@ -18,9 +18,9 @@ public class Twitch {
 	
 	public Twitch(String channel, String oauth, String nick, IMessagesListener listener) {
 		
-		this.channel = channel;
+		this.channel = channel.toLowerCase();
 		this.oauth = oauth;
-		this.nick = nick;
+		this.nick = nick.toLowerCase();
 		this.listener = listener;
 		
 	}
@@ -32,14 +32,15 @@ public class Twitch {
         
 	}
 	
-	public Result connect() {
+	private boolean isChannelFind = false;
+	public synchronized Result connect() {
 		
 		if(thread != null) return Result.ALREADY_CONNECTED;
 		
-		Runnable runnable = new Runnable() {
+		Runnable run = new Runnable() {
 			
 			@Override
-			public void run() {
+			public synchronized void run() {
 				
 				try {
 					
@@ -63,6 +64,13 @@ public class Twitch {
 						if(line.indexOf("PING :tmi.twitch.tv") > -1)
 							sendString(bwriter, "PONG :tmi.twitch.tv");
 						
+						if(!isChannelFind && line.indexOf(".tmi.twitch.tv JOIN #" + channel) > -1) {
+							
+							isChannelFind = true;
+							notify();
+							
+						}
+						
 					}
 					
 					socket.close();
@@ -78,10 +86,17 @@ public class Twitch {
 			
 		};
 		
-		thread = new Thread(runnable, "irc" + channel);
+		thread = new Thread(run, "irc" + channel);
 		thread.start();
 		
-		return Result.SUCCESS;
+		try {wait(2000);} catch (Exception e) {
+			
+			e.printStackTrace();
+			return Result.ERROR;
+			
+		}
+		
+		return isChannelFind ? Result.SUCCESS : Result.NOT_FOUND_CHANNEL;
 		
 	}
 	
@@ -97,6 +112,13 @@ public class Twitch {
 		if(thread != null)
 			thread.stop();
 		thread = null;
+		
+	}
+	
+	@Override
+	public void finalize() {
+		
+		disconnect();
 		
 	}
 	
