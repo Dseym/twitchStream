@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Twitch {
 
@@ -14,13 +15,15 @@ public class Twitch {
 	private Thread thread;
 	private String oauth;
 	private String nick;
+	private char prefCommand;
 	private IMessagesListener listener;
 	
-	public Twitch(String channel, String oauth, String nick, IMessagesListener listener) {
+	public Twitch(String channel, String oauth, String nick, char prefCommand, IMessagesListener listener) {
 		
 		this.channel = channel.toLowerCase();
 		this.oauth = oauth;
 		this.nick = nick.toLowerCase();
+		this.prefCommand = prefCommand;
 		this.listener = listener;
 		
 	}
@@ -58,8 +61,16 @@ public class Twitch {
 					String line = null;
 					while ((line = breader.readLine()) != null) {
 						
-						if(line.indexOf("PRIVMSG #" + channel + " :") > -1)
-							listener.onMessage(line.split(":")[1].split("!")[0], line.split("PRIVMSG #" + channel + " :")[1]);
+						if(line.indexOf("PRIVMSG #" + channel + " :") > -1) {
+							
+							String nick = line.split(":")[1].split("!")[0];
+							String mess = line.split("PRIVMSG #" + channel + " :")[1];
+							if(mess.charAt(0) == prefCommand)
+								listener.onCommand(nick, mess.substring(1).split(" ")[0], Arrays.copyOfRange(mess.split(" "), 1, mess.split(" ").length));
+							else
+								listener.onMessage(nick, mess);
+							
+						}
 
 						if(line.indexOf("PING :tmi.twitch.tv") > -1)
 							sendString(bwriter, "PONG :tmi.twitch.tv");
@@ -86,7 +97,7 @@ public class Twitch {
 			
 		};
 		
-		thread = new Thread(run, "irc" + channel);
+		thread = new Thread(run, "irc-" + channel + "-" + nick);
 		thread.start();
 		
 		try {wait(2000);} catch (Exception e) {
