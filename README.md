@@ -1,5 +1,5 @@
 # twitchStream
-Плагин-библиотека позволяет связать майнкрафт и стрим на твиче / The plugin-lib allows you to link Minecraft and Twitch stream
+Плагин-библиотека позволяет связать майнкрафт и чат на твиче / The plugin-lib allows you to link Minecraft and Twitch chat
 
 # ENG
 ## Compile
@@ -22,10 +22,17 @@ IMessagesListener listener = new IMessagesListener() {
 		System.out.println(nick + ": " + message);
 		
 	}
+
+	@Override
+	public void onCommand(String nick, String command, String[] args) {
+		
+		System.out.println(nick + ": " + command + Arrays.toString(args));
+		
+	}
 	
 };
 
-Twitch twitch = new Twitch(channel, oauth, yourNick, listener);
+Twitch twitch = new Twitch(channel, oauth, yourNick, prefCommand, listener);
 
 twitch.connect();
 ```
@@ -51,10 +58,17 @@ IMessagesListener listener = new IMessagesListener() {
 		System.out.println(nick + ": " + message);
 		
 	}
+
+	@Override
+	public void onCommand(String nick, String command, String[] args) {
+		
+		System.out.println(nick + ": " + command + Arrays.toString(args));
+		
+	}
 	
 };
 
-Twitch twitch = new Twitch(channel, oauth, yourNick, listener);
+Twitch twitch = new Twitch(channel, oauth, yourNick, prefCommand, listener);
 
 twitch.connect();
 ```
